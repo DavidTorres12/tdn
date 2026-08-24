@@ -41,7 +41,10 @@ export default function Footer() {
 
   return (
     <footer className="footer-section">
-      <div className="footer-container">
+      {/* Marca de Agua Tipográfica de Fondo */}
+      <div className="footer-watermark">TDN</div>
+
+      <div className="footer-container reveal-on-scroll reveal-up">
         {/* Main Columns Grid */}
         <div className="footer-grid">
           {/* Column 1 - Brand Info */}

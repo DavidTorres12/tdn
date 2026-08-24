@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import useMenuData from '../hooks/useMenuData';
 
-const COMBOS = [
-  { id: 1, name: 'Combo 1', image: '/galeria/combo1.png' },
-  { id: 2, name: 'Combo 2', image: '/galeria/combo2.png' },
-  { id: 3, name: 'Combo 3', image: '/galeria/combo3.png' },
-  { id: 4, name: 'Combo 4', image: '/galeria/combo4.png' },
-  { id: 5, name: 'Combo 5', image: '/galeria/combo5.png' }
-];
-
-export default function Menu() {
+export default function Menu({ onOpenOrder }) {
+  const menuData = useMenuData();
+  const COMBOS = menuData.combos || [];
   const [activeIndex, setActiveIndex] = useState(1); // default to second burger (center)
 
   // Swipe support for mobile
@@ -53,23 +48,22 @@ export default function Menu() {
   };
 
   // WhatsApp direct link redirect
-  const handlePedir = (combo) => {
-    const phoneNumber = '5491123456789'; // Placeholder, user will change this
-    const message = `Hola Tierra de Nadie! 🍔 Quiero realizar el pedido online del *${combo.name}*.`;
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+  const handlePedir = () => {
+    if (onOpenOrder) {
+      onOpenOrder();
+    }
   };
 
   return (
     <section id="menu" className="menu-section">
-      <div className="menu-header">
+      <div className="menu-header reveal-on-scroll reveal-up">
         <span className="menu-nav-tag">↖ COLECCIÓN</span>
         <h2 className="menu-title">NUESTRAS BURGERS.</h2>
       </div>
 
       {/* 1. Imagen (Carrusel) */}
       <div
-        className="slider-container"
+        className="slider-container reveal-on-scroll reveal-scale delay-150"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -87,11 +81,13 @@ export default function Menu() {
               onClick={() => setActiveIndex(idx)}
             >
               <div className="burger-image-wrapper">
+                <div className="burger-spotlight" />
                 <img
                   src={combo.image}
                   alt={combo.name}
                   className="burger-slide-image"
                 />
+                <div className="burger-floor-shadow" />
               </div>
             </div>
           ))}
@@ -99,10 +95,10 @@ export default function Menu() {
       </div>
 
       {/* Info Group: Name, Nav, and Button */}
-      <div className="active-burger-info">
+      <div className="active-burger-info reveal-on-scroll reveal-up delay-250">
         {/* 2. Nombre del combo */}
         <h3 className="active-burger-name">
-          {COMBOS[activeIndex].name}
+          {COMBOS[activeIndex]?.name || ''}
         </h3>
 
         {/* 3. Navegación */}

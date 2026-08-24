@@ -67,7 +67,7 @@ export default function Contacto() {
     <section id="faq-contacto" className="contacto-section">
       <div className="contacto-container">
         {/* Left Column - FAQ */}
-        <div className="contacto-faq-col">
+        <div className="contacto-faq-col reveal-on-scroll reveal-left">
           <span className="contacto-tag">↖ DUDAS FRECUENTES</span>
           <h2 className="contacto-title">FAQ.</h2>
 
@@ -96,7 +96,7 @@ export default function Contacto() {
         </div>
 
         {/* Right Column - Location & Socials */}
-        <div className="contacto-info-col">
+        <div className="contacto-info-col reveal-on-scroll reveal-right delay-200">
           <span className="contacto-tag">↖ UBICACIÓN Y REDES</span>
           <h2 className="contacto-title">VISITANOS.</h2>
 
@@ -110,6 +110,8 @@ export default function Contacto() {
                 <p>O'Higgins 170, Oran, Salta.</p>
               </div>
             </div>
+
+
 
 
             {/* Google Maps Iframe */}

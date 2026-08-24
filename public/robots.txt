@@ -1,0 +1,6 @@
+# Robots.txt for burgeroran.com
+User-agent: *
+Allow: /
+
+# Sitemap Location
+Sitemap: https://burgeroran.com/sitemap.xml

@@ -1,0 +1,181 @@
+import { useState, useEffect } from 'react';
+
+const DEFAULT_MENU_DATA = {
+  combos: [
+    {
+      id: "combo-1",
+      number: "COMBO 1",
+      name: "COMBO 1",
+      badge: "MÁS PEDIDA 🔥",
+      image: "/galeria/combo1.png",
+      papas: true,
+      ingredients: ["Carne", "Queso cheddar", "Bacon", "Mayonesa"],
+      sizes: [
+        { name: "Simple", price: 10000 },
+        { name: "Doble", price: 12000, popular: true },
+        { name: "Triple", price: 15000 },
+        { name: "Cuádruple", price: 18000 }
+      ]
+    },
+    {
+      id: "combo-2",
+      number: "COMBO 2",
+      name: "COMBO 2",
+      badge: null,
+      image: "/galeria/combo2.png",
+      papas: true,
+      ingredients: ["Carne", "Queso cheddar", "Bacon", "Cebolla caramelizada", "Salsa Barbacoa"],
+      sizes: [
+        { name: "Simple", price: 12000 },
+        { name: "Doble", price: 14000, popular: true },
+        { name: "Triple", price: 17000 },
+        { name: "Cuádruple", price: 20000 }
+      ]
+    },
+    {
+      id: "combo-3",
+      number: "COMBO 3",
+      name: "COMBO 3",
+      badge: "MAX CRISPY 💥",
+      image: "/galeria/combo3.png",
+      papas: true,
+      ingredients: ["Doble medallón", "Bacon", "Queso cheddar", "Alioli", "Cebolla crispy"],
+      sizes: [
+        { name: "Simple", price: 14000 },
+        { name: "Doble", price: 15000, popular: true },
+        { name: "Triple", price: 18000 },
+        { name: "Cuádruple", price: 21000 }
+      ]
+    },
+    {
+      id: "combo-4",
+      number: "COMBO 4",
+      name: "COMBO 4",
+      badge: "NUEVA 🌟",
+      image: "/galeria/combo4.png",
+      papas: true,
+      ingredients: ["Carne", "Queso cheddar", "Bacon", "Pimiento ahumado", "Mayo ahumada"],
+      sizes: [
+        { name: "Simple", price: 14000 },
+        { name: "Doble", price: 15000, popular: true },
+        { name: "Triple", price: 18000 },
+        { name: "Cuádruple", price: 21000 }
+      ]
+    },
+    {
+      id: "combo-5",
+      number: "COMBO 5",
+      name: "COMBO 5",
+      badge: "ESPECIAL 👑",
+      image: "/galeria/combo5.png",
+      papas: true,
+      ingredients: ["Carne", "Cheddar Ahumado Blanco", "Bacon", "Chimi", "Mayo Asada", "Cebolla Grillada"],
+      sizes: [
+        { name: "Simple", price: 14000 },
+        { name: "Doble", price: 15000, popular: true },
+        { name: "Triple", "price": 18000 },
+        { name: "Cuádruple", price: 21000 }
+      ]
+    }
+  ],
+  papas: [
+    {
+      id: "papa-1",
+      name: "PAPAS CLÁSICAS",
+      icon: "🍟",
+      desc: "Porción generosa de papas fritas doradas y crocantes al punto justo",
+      price: 7000
+    },
+    {
+      id: "papa-2",
+      name: "PAPAS CON CHEDDAR Y BACON",
+      icon: "🧀",
+      badge: "MÁS PEDIDAS 🔥",
+      featured: true,
+      desc: "Bañadas en nuestra salsa cheddar fundida y espolvoreadas con abundante bacon crocante",
+      price: 9000
+    }
+  ],
+  extras: [
+    {
+      id: "extra-lt",
+      name: "EXTRA LECHUGA Y TOMATE",
+      desc: "Lechuga fresca y tomate",
+      icon: "🥗",
+      price: 1000
+    },
+    {
+      id: "extra-carne",
+      name: "MEDALLÓN DE CARNE",
+      desc: "Extra smash 120g novillo premium",
+      icon: "🥩",
+      price: 3000
+    },
+    {
+      id: "extra-cheddar",
+      name: "EXTRA CHEDDAR",
+      desc: "Fetas de queso cheddar derretido",
+      icon: "🧀",
+      price: 1000
+    },
+    {
+      id: "extra-bacon",
+      name: "EXTRA BACON",
+      desc: "Tiras de panceta ahumada crocante",
+      icon: "🥓",
+      price: 1500
+    },
+    {
+      id: "extra-papas",
+      name: "EXTRA PAPAS",
+      desc: "Porción adicional para acompañar",
+      icon: "🍟",
+      price: 2000
+    }
+  ],
+  bebidas: {
+    gaseosas2L: [
+      { id: "drink-pepsi", name: "PEPSI 2L", price: 4000 },
+      { id: "drink-mirinda", name: "MIRINDA 2L", price: 4000 },
+      { id: "drink-7up", name: "7UP 2L", price: 4000 }
+    ],
+    cervezas: [
+      { id: "drink-quilmes", name: "QUILMES LATA", desc: "Lata 473ml · Cerveza rubia clásica", price: 4000 },
+      { id: "drink-imperial", name: "IMPERIAL LATA", desc: "Lata 473ml · Especialidad Premium", price: 4000 }
+    ],
+    individuales: [
+      { id: "drink-vaso", name: "VASO DE GASEOSA", desc: "Medio litro (500ml)", icon: "🥤", price: 1000 },
+      { id: "drink-agua", name: "AGUA MINERAL", desc: "Botella medio litro (500ml)", icon: "💧", price: 1000 }
+    ]
+  }
+};
+
+export function formatPrice(value) {
+  if (typeof value === 'number') {
+    return '$' + value.toLocaleString('es-AR');
+  }
+  return value;
+}
+
+export default function useMenuData() {
+  const [menuData, setMenuData] = useState(DEFAULT_MENU_DATA);
+
+  useEffect(() => {
+    // Fetch live menuData.json with cache buster so Hostinger edits reflect immediately
+    fetch('/menuData.json?t=' + Date.now())
+      .then((res) => {
+        if (!res.ok) throw new Error('HTTP error ' + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.combos && data.papas) {
+          setMenuData(data);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not load live /menuData.json, using bundled default menu data.', err);
+      });
+  }, []);
+
+  return menuData;
+}

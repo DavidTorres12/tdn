@@ -47,7 +47,7 @@ export default function Galeria() {
 
   return (
     <section id="galeria" className="galeria-section">
-      <div className="galeria-header">
+      <div className="galeria-header reveal-on-scroll reveal-up">
         <span className="galeria-nav-tag">↖ NUESTRO ESPACIO</span>
         <h2 className="galeria-title">GALERÍA VISUAL.</h2>
       </div>
@@ -57,7 +57,7 @@ export default function Galeria() {
         {IMAGES.map((img, index) => (
           <div 
             key={img.id} 
-            className={`galeria-item item-${index + 1}`}
+            className={`galeria-item item-${index + 1} reveal-on-scroll reveal-scale delay-${(index + 1) * 100}`}
             onClick={() => openLightbox(index)}
           >
             <img src={img.src} alt={img.alt} className="galeria-img" />

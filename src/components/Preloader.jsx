@@ -40,24 +40,39 @@ export default function Preloader({ onComplete }) {
 
   return (
     <div className={`preloader-overlay ${isFadingOut ? 'fade-out-slide' : ''}`}>
-      <div className="preloader-content">
-        {/* Pulsing Logo */}
+      {/* Glow ambiental de fondo */}
+      <div className="preloader-ambient-glow" />
+
+      <div className={`preloader-content ${isFadingOut ? 'content-exit' : ''}`}>
+        {/* Logo con resplandor suave */}
         <div className="preloader-logo-wrapper">
           <img 
             src="/galeria/Logo-tierradn.webp" 
             alt="Tierra de Nadie Logo" 
-            className="preloader-logo" 
+            className="preloader-logo"
+            width="245"
+            height="142"
+            fetchPriority="high"
+            decoding="async" 
           />
         </div>
         
-        {/* Minimalist Progress Bar */}
-        <div className="preloader-progress-container">
-          <div 
-            className="preloader-progress-bar" 
-            style={{ width: `${progress}%` }}
-          ></div>
+        {/* Barra de progreso y contador dinámico % */}
+        <div className="preloader-status-wrapper">
+          <div className="preloader-progress-container">
+            <div 
+              className="preloader-progress-bar" 
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+          
+          <div className="preloader-percentage-container">
+            <span className="preloader-status-label">PREPARANDO ANTOJO</span>
+            <span className="preloader-counter">{progress}%</span>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
