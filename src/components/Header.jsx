@@ -54,15 +54,32 @@ export default function Header({ onOpenCarta, onOpenOrder, cartCount = 0 }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu drawer is open
+  // Lock body scroll and handle keyboard/resize when mobile menu drawer is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleResize);
     return () => {
       document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
     };
   }, [isOpen]);
 
@@ -82,7 +99,7 @@ export default function Header({ onOpenCarta, onOpenOrder, cartCount = 0 }) {
 
   return (
     <>
-      <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+      <header className={`header ${isScrolled ? 'scrolled' : ''} ${isOpen ? 'menu-open' : ''}`}>
         <div className="header-container">
           {/* Logo */}
           <a href="#" className="logo-brand animate-fade-in">
@@ -126,11 +143,11 @@ export default function Header({ onOpenCarta, onOpenOrder, cartCount = 0 }) {
             </button>
 
             <button
-              className={`mobile-menu-btn ${isOpen ? 'active' : ''}`}
+              className="mobile-menu-btn"
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Menu principal"
             >
-              {isOpen ? <X size={26} /> : <Menu size={26} />}
+              <Menu size={26} />
             </button>
           </div>
         </div>
